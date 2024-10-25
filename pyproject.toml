@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "taskbotpyrogram"
+version = "0.1.0"
+description = ""
+authors = ["jahoroshi4y <jahoroshi4y@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyrogram = "^2.0.106"
+asyncpg = "^0.30.0"
+psycopg2-binary = "^2.9.10"
+pydantic-settings = "^2.6.0"
+tgcrypto = "^1.2.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
