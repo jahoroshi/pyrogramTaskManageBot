@@ -2,8 +2,7 @@ from typing import List
 
 from pyrogram.types import Message, CallbackQuery
 
-from app.keyboards.menu import main_menu
-from app.keyboards.task import task_menu
+import app.keyboards as kb
 from app.models import Task
 from app.states.fsm import FSMContext
 from app.states.states import CreateTask
@@ -35,7 +34,7 @@ class TaskHandler:
             description: str = message.text
             # TODO: отправить в базу данные
             await self.state.clear(user_id)
-            await message.reply('Задача успешно добавлена!', reply_markup=main_menu())
+            await message.reply('Задача успешно добавлена!', reply_markup=kb.main_menu())
 
     async def list_tasks(self, message: Message) -> None:
         """Выводит все задачи пользователя"""
@@ -46,8 +45,8 @@ class TaskHandler:
         else:
             for task in tasks:
                 status: str = 'OK' if task.is_completed else 'NO'
-                keyboard = ...
-                await message.reply(f'{status} {task.name}', reply_markup=task_menu(task.task_id, task.is_completed))
+                keyboard = kb.task_menu(task.task_id, task.is_completed)
+                await message.reply(f'{status} {task.name}', reply_markup=keyboard)
 
     async def callback_handler(self, query: CallbackQuery) -> None:
         """Обрабатывает нажатие кнопки"""

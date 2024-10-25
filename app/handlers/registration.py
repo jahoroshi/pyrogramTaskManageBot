@@ -1,8 +1,9 @@
-from pyrogram import Client
-from pyrogram.types import Message, User
+from pyrogram.types import Message
 
-from app.keyboards.menu import main_menu
+import app.keyboards as kb
+from app.models import User
 from app.states import FSMContext
+from app.states.states import Registration
 
 
 class RegistrationHandler:
@@ -12,7 +13,7 @@ class RegistrationHandler:
         self.state: FSMContext = state
 
     async def start(self, message: Message) -> None:
-        """Обрабатывает команду /start."""
+        """Обрабатывает команду start."""
 
         user_id: int = message.from_user.id
         user = await self.get_user(user_id)
@@ -21,13 +22,32 @@ class RegistrationHandler:
             # TODO: установка FSM
             await message.reply('Введите имя!')
         else:
-            await message.reply('С возвращением!', reply_markup=main_menu())
+            await message.reply('С возвращением!', reply_markup=kb.main_menu())
 
     async def registration(self, message: Message) -> None:
         """Регистрация нового пользователя"""
-        await message.reply('Регистрация пользователя')
+        user_id = message.from_user.id
+        state = await self.state.get_state(user_id)
+        if state and state == 'Registration.name':
+            await self.state.set_state(user_id, Registration.username)
+            await self.state.set_data(user_id, {'name': message.text})
+            await message.reply('Введите имя пользователя:')
+        elif state and state == 'Registration.username':
+            state_data = await self.state.get_data(user_id)
+            name: str = await state_data.get('name')
+            username: str = message.text
+            try:
+                # TODO:отправляем в бд
+                ...
+                await message.reply('Регистрация завершена успешно!', reply_markup=kb.main_menu())
+                await self.state.clear(user_id)
+            except:
+                await message.reply('Пользователь с таким именем уже существует. Пожалуйста, введите другой логин:')
 
     async def get_user(self, user_id: int) -> User | None:
-        """Получает пользователя из базы данных."""
+        """Получает пользователя из базы."""
+        query = ...
+        data = ...
+        if data:
+            return User(*data)
         return
-
