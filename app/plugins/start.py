@@ -1,5 +1,8 @@
 from pyrogram import filters, Client
 
-@Client.on_message(filters.text & filters.incoming)
-async def reply_to_all(client, message):
-    await message.reply("Привет! Это автоответ.")
+from app.handlers import reg_handler
+
+
+@Client.on_message(filters.command("start"))
+async def start(client, message):
+    await reg_handler.start(client, message)
