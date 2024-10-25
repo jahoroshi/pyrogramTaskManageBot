@@ -18,7 +18,7 @@ class FSMContext:
         self.states: Dict[int, str] = {}
         self.storage: Dict[int, Any] = {}
 
-    def set_state(self, user_id: int, state: State) -> None:
+    async def set_state(self, user_id: int, state: State) -> None:
         """
         Устанавливает состояние пользователя.
         Ожидает экземпляр State, который выводит ИмяКласса.ИмяПодсостояния.
@@ -28,26 +28,26 @@ class FSMContext:
         else:
             raise ValueError("Ожидается экземпляр класса State.")
 
-    def get_state(self, user_id: int) -> str | None:
+    async def get_state(self, user_id: int) -> str | None:
         """
         Получает состояние пользователя.
         Возвращает строку в формате 'ИмяКласса.ИмяПодсостояния'.
         """
         return self.states.get(user_id)
 
-    def set_data(self, user_id: int, data: Dict[str, Any]) -> None:
+    async def set_data(self, user_id: int, data: Dict[str, Any]) -> None:
         """Добавление данных пользователя."""
         self.storage[user_id] = data
 
-    def get_data(self, user_id: int) -> Optional[Dict[str, Any]]:
+    async def get_data(self, user_id: int) -> Optional[Dict[str, Any]]:
         """Получение данных пользователя."""
         return self.storage.get(user_id)
 
-    def delete_data(self, user_id: int) -> None:
+    async def delete_data(self, user_id: int) -> None:
         """Удаление данных пользователя."""
         self.storage.pop(user_id, None)
 
-    def clear(self, user_id: int) -> None:
+    async def clear(self, user_id: int) -> None:
         """Удаляет состояние и данные пользователя."""
         self.states.pop(user_id, None)
         self.storage.pop(user_id, None)
