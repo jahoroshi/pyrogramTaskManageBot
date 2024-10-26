@@ -13,6 +13,8 @@ psycopg2-binary = "^2.9.10"
 pydantic-settings = "^2.6.0"
 tgcrypto = "^1.2.5"
 black = "^24.10.0"
+psycopg = {extras = ["async", "binary"], version = "^3.2.3"}
+psycopg-pool = "^3.2.3"
 
 
 [build-system]
