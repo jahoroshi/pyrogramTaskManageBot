@@ -49,3 +49,6 @@ class TaskBot(Client):
     #     """
     #     cmd = message.command
     #     return " ".join(cmd[1:]) if len(cmd) > 1 else None
+
+
+task_bot = TaskBot()
