@@ -2,9 +2,11 @@
 import os
 import sys
 
-from pyrogram import Client
+from pyrogram import Client, enums
+
 from pyrogram.types import Message
 
+from app.database import Database, db
 from settings import settings
 
 
@@ -20,18 +22,19 @@ class TaskBot(Client):
             api_hash=config.api_hash,
             bot_token=config.bot_token,
             plugins=dict(root="app.plugins"),
+            parse_mode=enums.ParseMode.MARKDOWN,
         )
-        # self.db: Database = Database()
+        self.db: Database = db
 
     async def start(self):
         """Запускает бота и подключается к базе данных."""
         await super().start()
-        # await self.db.connect()
+        await self.db.connect()
         me = await self.get_me()
         print(f"Бот @{me.username} запущен.")
 
     async def stop(self):
-        # await self.db.close()
+        await self.db.close()
         await super().stop()
         print("Task Stopped.")
 

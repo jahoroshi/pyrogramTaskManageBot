@@ -11,6 +11,12 @@ class State:
     def __repr__(self):
         return f"{self.owner}.{self.name}"
 
+    def __eq__(self, other):
+        """Метод позволяет сравнивать класс со строкой"""
+        if isinstance(other, str):
+            return f"{self.owner}.{self.name}" == other
+        return NotImplemented
+
 
 class FSMContext:
     """Контекст FSM для хранения состояния и данных пользователя."""

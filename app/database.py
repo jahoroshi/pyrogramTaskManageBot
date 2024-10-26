@@ -1,6 +1,6 @@
-from typing import Optional, Union, Any, LiteralString
+from typing import Optional, Union, Any
 from psycopg_pool import AsyncConnectionPool
-from psycopg import AsyncConnection
+from psycopg.sql import LiteralString
 from psycopg.rows import dict_row
 from psycopg.sql import SQL
 
@@ -29,6 +29,7 @@ class Database:
             open=True,
             kwargs={'row_factory': dict_row}
         )
+        await self.pool.open()
         await self.init_tables()
 
     async def close(self) -> None:
@@ -43,7 +44,7 @@ class Database:
                 async with conn.cursor() as cursor:
                     await cursor.execute(
                         """
-                    CREATE TABLE IF NOT EXISTS user (
+                    CREATE TABLE IF NOT EXISTS users (
                     user_id BIGINT PRIMARY KEY,
                     name TEXT NOT NULL,
                     username TEXT UNIQUE NOT NULL
@@ -52,13 +53,13 @@ class Database:
                     )
                     await cursor.execute(
                         """
-                        CREATE TABLE IN NOT EXISTS tasks (
+                        CREATE TABLE IF NOT EXISTS tasks (
                         task_id SERIAL PRIMARY KEY,
-                        user_id BIGINTEGER NOT NULL,
+                        user_id BIGINT NOT NULL,
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
                         is_completed BOOLEAN NOT NULL DEFAULT FALSE,
-                        FOREING KEY(user_id) REFERENCES users(user_id)
+                        FOREIGN KEY(user_id) REFERENCES users(user_id)
                         )
                         """
                     )
@@ -66,7 +67,7 @@ class Database:
         else:
             raise ConnectionError('Пул соединений не инициализирован')
 
-    async def execute(self, query: LiteralString, params: Union[list, tuple]) -> Any:
+    async def execute(self, query: str, params: Union[list, tuple] = ()) -> Any:
         """Выполнение запроса к базе данных. Возвращает результат/результаты"""
         if self.pool:
             async with self.pool.connection() as conn:
@@ -81,7 +82,7 @@ class Database:
         else:
             raise ConnectionError("Пул соединений не инициализирован.")
 
-    async def get_one(self, query: LiteralString, params: Union[tuple, list]) -> Any:
+    async def get_one(self, query: str, params: Union[tuple, list] = ()) -> Any:
         """Выполнение одного запроса на получение одного элемента."""
         if self.pool:
             async with self.pool.connection() as conn:

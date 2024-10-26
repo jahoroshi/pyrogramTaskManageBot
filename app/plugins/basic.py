@@ -3,6 +3,7 @@ from pyrogram.types import CallbackQuery
 
 from app.handlers import reg_handler, task_handler
 from app.states import state
+from app.states.states import Registration, CreateTask
 
 
 @Client.on_message(filters.command("start"))
@@ -15,9 +16,9 @@ async def text_message(client, message):
     user_id = message.from_user.id
     cur_state = await state.get_state(user_id)
     if cur_state:
-        if cur_state in ["Registration.name", "Registration_username"]:
-            await reg_handler.handle_registration(message)
-        elif cur_state in ["CreateTask.name", "CreateTask.description"]:
+        if cur_state in [Registration.name, Registration.username]:
+            await reg_handler.registration(message)
+        elif cur_state in [CreateTask.name, CreateTask.description]:
             await task_handler.handle_task_creation(message)
     else:
         if message.text == "Создать задачу":
@@ -34,3 +35,5 @@ async def callback(client: Client, query: CallbackQuery):
         await task_handler.handle_status(query)
     elif query.data.startswith('taskdelete'):
         await task_handler.delete_task(query)
+    elif query.data.startswith('taskedit'):
+        await query.edit_message_reply_markup()
