@@ -20,29 +20,33 @@ class RegistrationHandler:
         user = 1
         if user is None:
             # TODO: установка FSM
-            await message.reply('Введите имя!')
+            await message.reply("Введите имя!")
         else:
-            await message.reply('С возвращением!', reply_markup=kb.main_menu())
+            await message.reply("С возвращением!", reply_markup=kb.main_menu())
 
     async def registration(self, message: Message) -> None:
         """Регистрация нового пользователя"""
         user_id = message.from_user.id
         state = await self.state.get_state(user_id)
-        if state and state == 'Registration.name':
+        if state and state == "Registration.name":
             await self.state.set_state(user_id, Registration.username)
-            await self.state.set_data(user_id, {'name': message.text})
-            await message.reply('Введите имя пользователя:')
-        elif state and state == 'Registration.username':
+            await self.state.set_data(user_id, {"name": message.text})
+            await message.reply("Введите имя пользователя:")
+        elif state and state == "Registration.username":
             state_data = await self.state.get_data(user_id)
-            name: str = await state_data.get('name')
+            name: str = await state_data.get("name")
             username: str = message.text
             try:
                 # TODO:отправляем в бд
                 ...
-                await message.reply('Регистрация завершена успешно!', reply_markup=kb.main_menu())
+                await message.reply(
+                    "Регистрация завершена успешно!", reply_markup=kb.main_menu()
+                )
                 await self.state.clear(user_id)
             except:
-                await message.reply('Пользователь с таким именем уже существует. Пожалуйста, введите другой логин:')
+                await message.reply(
+                    "Пользователь с таким именем уже существует. Пожалуйста, введите другой логин:"
+                )
 
     async def get_user(self, user_id: int) -> User | None:
         """Получает пользователя из базы."""

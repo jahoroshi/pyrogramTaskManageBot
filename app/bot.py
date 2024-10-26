@@ -10,15 +10,16 @@ from settings import settings
 
 class TaskBot(Client):
     """Класс Telegram-бота для управления задачами."""
+
     def __init__(self):
         config = settings.tg
 
         super().__init__(
-            'task_manager_bot',
+            "task_manager_bot",
             api_id=config.api_id,
             api_hash=config.api_hash,
             bot_token=config.bot_token,
-            plugins=dict(root="app.plugins")
+            plugins=dict(root="app.plugins"),
         )
         # self.db: Database = Database()
 

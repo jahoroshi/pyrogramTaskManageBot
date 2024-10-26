@@ -1,5 +1,6 @@
 from typing import Dict, Any, Optional
 
+
 class State:
     """Базовый класс для всех состояний"""
 
