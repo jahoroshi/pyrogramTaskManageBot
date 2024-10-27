@@ -3,7 +3,7 @@ import asyncio
 import psycopg
 from pyrogram.types import CallbackQuery
 
-from app.handlers.task.base_task_handler import BaseTaskHandler
+from bot_src.handlers.task.base_task_handler import BaseTaskHandler
 
 
 class TaskDeletionHandler(BaseTaskHandler):
@@ -21,5 +21,5 @@ class TaskDeletionHandler(BaseTaskHandler):
             await callback_query.answer("Ошибка при удалении задачи.")
         else:
             await callback_query.answer("Задача успешно удалена.")
-            await asyncio.sleep(1.5)
+            await asyncio.sleep(1)
             await callback_query.message.delete()

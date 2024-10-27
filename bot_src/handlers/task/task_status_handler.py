@@ -3,8 +3,8 @@ import asyncio
 import psycopg
 from pyrogram.types import CallbackQuery
 
-import app.keyboards as kb
-from app.handlers.task.base_task_handler import BaseTaskHandler
+import bot_src.keyboards as kb
+from bot_src.handlers.task.base_task_handler import BaseTaskHandler
 
 
 class TaskStatusHandler(BaseTaskHandler):
@@ -27,11 +27,18 @@ class TaskStatusHandler(BaseTaskHandler):
             if response and (r := response[0]):
                 if r.get("is_completed"):
                     await callback_query.answer("Задача выполнена!")
-                    await asyncio.sleep(1.5)
+                    await asyncio.sleep(1)
                     await callback_query.message.delete()
                 else:
                     await callback_query.answer("Задача вновь активна!")
-                    task = await self._get_task(user_id, task_id)
+                    try:
+                        task = await self._get_task(user_id, task_id)
+                    except psycopg.Error:
+                        await callback_query.message.reply(
+                            "Произошла ошибка, попробуйте еще раз."
+                        )
+                        return
+
                     text = (
                         f"⏰ **{task.name}**\n" f"```Описание:\n{task.description}```"
                     )

@@ -1,8 +1,8 @@
 from typing import List
 
-from app.database import Database
-from app.models import Task
-from app.states import FSMContext
+from bot_src.database import Database
+from bot_src.models import Task
+from bot_src.states import FSMContext
 
 
 class BaseTaskHandler:

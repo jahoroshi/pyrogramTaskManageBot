@@ -1,3 +1,4 @@
+import random
 from typing import Optional, Union, Any
 
 from faker import Faker
@@ -106,7 +107,7 @@ class Database:
                         INSERT INTO tasks (user_id, name, description, is_completed)
                         VALUES (%s, %s, %s, %s)
                         """,
-                        (user_id, task_name, task_desc, False)
+                        (user_id, task_name, task_desc, random.choice([True, False]))
                     )
                 await conn.commit()
 

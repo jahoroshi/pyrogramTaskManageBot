@@ -2,7 +2,7 @@ from typing import Tuple, Any
 
 from pyrogram import filters
 
-from app.states import state
+from bot_src.states import state
 
 
 def state_filter(states: Tuple[Any, Any]):

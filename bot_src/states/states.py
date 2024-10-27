@@ -1,4 +1,4 @@
-from app.states.fsm import State
+from bot_src.states.fsm import State
 
 """Статусы для FSMContext"""
 

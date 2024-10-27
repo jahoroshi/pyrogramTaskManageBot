@@ -1,6 +1,6 @@
-from app.database import Database
-from app.models import User
-from app.states import FSMContext
+from bot_src.database import Database
+from bot_src.models import User
+from bot_src.states import FSMContext
 
 
 class BaseUserHandler:

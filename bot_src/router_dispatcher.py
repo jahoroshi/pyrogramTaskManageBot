@@ -1,8 +1,8 @@
 from pyrogram import filters
 
-from app.filters import state_filter
-from app.handlers import user_handler, task_handler
-from app.states import states as st
+from bot_src.filters import state_filter
+from bot_src.handlers import user_handler, task_handler
+from bot_src.states import states as st
 
 """
 Регистрация хендлеров по спискам. Каждый список должен именоваться как класс из pyrogram.handlers в snake_case.

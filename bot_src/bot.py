@@ -7,7 +7,7 @@ from pyrogram import Client, enums
 from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 from pyrogram.types import BotCommand
 
-from app.database import Database, db
+from bot_src.database import Database, db
 from settings import settings
 
 
@@ -30,7 +30,7 @@ class TaskBot(Client):
         )
         self.db: Database = db
         self.route_disp_path = (
-            "app.router_dispatcher"  # Маршрут к модулю со списками хэндлеров
+            "bot_src.router_dispatcher"  # Маршрут к модулю со списками хэндлеров
         )
 
     async def start(self):

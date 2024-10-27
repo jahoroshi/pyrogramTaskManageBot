@@ -1,3 +1,5 @@
+import os
+
 from pydantic_settings import BaseSettings
 
 
@@ -9,7 +11,7 @@ class DatabaseSettings(BaseSettings):
     db_password: str
 
     class Config:
-        env_file = ".env"
+        env_file = os.getenv("ENV_FILE", ".env")
         extra = "ignore"
 
 
@@ -19,7 +21,7 @@ class TelegramSettings(BaseSettings):
     bot_token: str
 
     class Config:
-        env_file = ".env"
+        env_file = os.getenv("ENV_FILE", ".env")
         extra = "ignore"
 
 

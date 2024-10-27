@@ -1,9 +1,9 @@
 import psycopg
 from pyrogram.types import Message
 
-import app.keyboards as kb
-from app.handlers.user.base_user_handler import BaseUserHandler
-from app.states.states import Registration
+import bot_src.keyboards as kb
+from bot_src.handlers.user.base_user_handler import BaseUserHandler
+from bot_src.states.states import Registration
 
 
 class RegistrationProcessHandler(BaseUserHandler):
@@ -25,7 +25,14 @@ class RegistrationProcessHandler(BaseUserHandler):
                     "INSERT INTO users (user_id, name, username) VALUES (%s, %s, %s)"
                 )
                 params = (user_id, name, username)
-                await self.db.execute(query, params)
+                try:
+                    await self.db.execute(query, params)
+                except psycopg.Error:
+                    await message.reply(
+                        "Произошла ошибка, попробуйте еще раз."
+                    )
+                    return
+
                 await message.reply(
                     "**🎉 Регистрация завершена успешно!**", reply_markup=kb.main_menu()
                 )

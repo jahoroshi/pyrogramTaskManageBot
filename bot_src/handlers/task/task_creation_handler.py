@@ -1,9 +1,9 @@
 import psycopg
 from pyrogram.types import Message
 
-import app.keyboards as kb
-from app.handlers.task.base_task_handler import BaseTaskHandler
-from app.states.states import CreateTask
+import bot_src.keyboards as kb
+from bot_src.handlers.task.base_task_handler import BaseTaskHandler
+from bot_src.states.states import CreateTask
 
 
 class TaskCreationHandler(BaseTaskHandler):

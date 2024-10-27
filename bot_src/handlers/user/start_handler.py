@@ -1,8 +1,8 @@
 from pyrogram.types import Message
 
-import app.keyboards as kb
-from app.handlers.user.base_user_handler import BaseUserHandler
-from app.states.states import Registration
+import bot_src.keyboards as kb
+from bot_src.handlers.user.base_user_handler import BaseUserHandler
+from bot_src.states.states import Registration
 
 
 class StartHandler(BaseUserHandler):

@@ -3,9 +3,9 @@ import asyncio
 import psycopg
 from pyrogram.types import Message, CallbackQuery
 
-import app.keyboards as kb
-from app.handlers.task.base_task_handler import BaseTaskHandler
-from app.states.states import EditTask
+import bot_src.keyboards as kb
+from bot_src.handlers.task.base_task_handler import BaseTaskHandler
+from bot_src.states.states import EditTask
 
 
 class TaskEditingHandler(BaseTaskHandler):
@@ -68,7 +68,14 @@ class TaskEditingHandler(BaseTaskHandler):
         data = callback_query.data
         user_id = callback_query.from_user.id
         task_id = int(data.split("_")[-1])
-        task = await self._get_task(user_id, task_id)
+        try:
+            task = await self._get_task(user_id, task_id)
+        except psycopg.Error:
+            await callback_query.message.reply(
+                "Произошла ошибка, попробуйте еще раз."
+            )
+            return
+
         await callback_query.edit_message_reply_markup(
             reply_markup=kb.task_menu(task_id, task.is_completed)
         )
