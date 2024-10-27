@@ -15,18 +15,18 @@ class RegistrationHandler:
         self.state: FSMContext = state
         self.db: Database = database
 
-    async def start(self, message: Message) -> None:
+    async def start(self, _, message: Message) -> None:
         """Обрабатывает команду start."""
 
         user_id: int = message.from_user.id
-        user = await self.get_user(user_id)
+        user = await self._get_user(user_id)
         if user is None:
             await self.state.set_state(user_id, Registration.name)
             await message.reply("Введите имя!")
         else:
             await message.reply("С возвращением!", reply_markup=kb.main_menu())
 
-    async def registration(self, message: Message) -> None:
+    async def registration(self, _, message: Message) -> None:
         """Регистрация нового пользователя"""
         user_id = message.from_user.id
         state = await self.state.get_state(user_id)
@@ -54,7 +54,7 @@ class RegistrationHandler:
                     "Пользователь с таким именем уже существует. Пожалуйста, введите другой логин:"
                 )
 
-    async def get_user(self, user_id: int) -> User | None:
+    async def _get_user(self, user_id: int) -> User | None:
         """Получает пользователя из базы."""
         query = "SELECT * FROM users WHERE user_id = %s"
         data = await self.db.get_one(query, (user_id,))

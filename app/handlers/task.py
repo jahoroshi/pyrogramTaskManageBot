@@ -72,7 +72,7 @@ class TaskHandler:
     async def handle_status(self, _, callback_query: CallbackQuery) -> None:
         """
         Изменение статуса задачи
-        Изменение кнопки отметки задачи
+        Изменение inline-кнопки отметки задачи
         """
         data: str = callback_query.data
         user_id: int = callback_query.from_user.id
@@ -138,9 +138,6 @@ class TaskHandler:
         Вызывается после нажатия inline-кнопки редактирования задачи
         Начинает процесс редактирования задачи
         В соответствии с нажатой inline-кнопкой ставится FMS редактирования
-        :param _:
-        :param callback_query:
-        :return:
         """
         data = callback_query.data
         user_id = callback_query.from_user.id
