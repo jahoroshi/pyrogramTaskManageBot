@@ -71,9 +71,7 @@ class TaskEditingHandler(BaseTaskHandler):
         try:
             task = await self._get_task(user_id, task_id)
         except psycopg.Error:
-            await callback_query.message.reply(
-                "Произошла ошибка, попробуйте еще раз."
-            )
+            await callback_query.message.reply("Произошла ошибка, попробуйте еще раз.")
             return
 
         await callback_query.edit_message_reply_markup(

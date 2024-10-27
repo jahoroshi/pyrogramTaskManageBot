@@ -14,9 +14,7 @@ class TaskListingHandler(BaseTaskHandler):
         try:
             tasks = await self._get_tasks(user_id)
         except psycopg.Error:
-            await message.reply(
-                "Произошла ошибка, попробуйте еще раз."
-            )
+            await message.reply("Произошла ошибка, попробуйте еще раз.")
             return
 
         if not tasks:

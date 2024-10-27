@@ -28,9 +28,7 @@ class RegistrationProcessHandler(BaseUserHandler):
                 try:
                     await self.db.execute(query, params)
                 except psycopg.Error:
-                    await message.reply(
-                        "Произошла ошибка, попробуйте еще раз."
-                    )
+                    await message.reply("Произошла ошибка, попробуйте еще раз.")
                     return
 
                 await message.reply(

@@ -16,9 +16,7 @@ class UserDeletionHandler(BaseUserHandler):
         try:
             await self.db.execute(query, (user_id,))
         except psycopg.Error:
-            await message.reply(
-                "Произошла ошибка, попробуйте еще раз."
-            )
+            await message.reply("Произошла ошибка, попробуйте еще раз.")
             return
 
         await asyncio.sleep(0.7)
