@@ -1,16 +1,14 @@
 # import psutil
+import importlib
 import os
 import sys
-import importlib
-from pyrogram import Client, enums, filters
-from pyrogram.handlers import MessageHandler, CallbackQueryHandler
 
-from pyrogram.types import Message
+from pyrogram import Client, enums
+from pyrogram.handlers import MessageHandler, CallbackQueryHandler
+from pyrogram.types import BotCommand
 
 from app.database import Database, db
-from app.handlers import reg_handler
 from settings import settings
-
 
 
 class TaskBot(Client):
@@ -32,7 +30,7 @@ class TaskBot(Client):
             plugins=dict(root="app.plugins")
         )
         self.db: Database = db
-        self.routers_path = 'app.plugins.basic' #Маршрут к дериктории со списками хэндлеров
+        self.routers_path = 'app.plugins.basic'  # Маршрут к дериктории со списками хэндлеров
 
     async def start(self):
         """Запускает бота и подключается к базе данных."""
@@ -44,8 +42,6 @@ class TaskBot(Client):
         me = await self.get_me()
         print(f"Бот @{me.username} запущен.")
 
-
-
     async def stop(self):
         await self.db.close()
         await super().stop()
@@ -54,6 +50,14 @@ class TaskBot(Client):
     async def restart(self):
         await self.stop()
         os.execl(sys.executable, sys.executable, *sys.argv)
+
+    async def _set_commands(self):
+        """Установка команд в меню команд бота"""
+        commands = [
+            BotCommand('start', 'Начать работу'),
+            BotCommand('delete', 'Удалить аккаунт'),
+        ]
+        await self.set_bot_commands(commands)
 
     async def _register_handlers(self):
         # Получаем импорт файла, содержащего список хэндлеров
@@ -75,7 +79,6 @@ class TaskBot(Client):
                 registration_method(handlers)
             else:
                 print(f"Метод регистрации '{method_name}' не найден в классе TaskBot.")
-
 
     # Отдельные методы для регистрации хэндлеров
     def register_message_handlers(self, handlers):

@@ -25,7 +25,7 @@ def task_edit_name_discr(task_id: int) -> InlineKeyboardMarkup:
             InlineKeyboardButton("Изменить описание", callback_data=f"edit_task_disc_{task_id}"),
         ],
         [
-            InlineKeyboardButton("Назад", callback_data=f"back_to_taskmenu"),
+            InlineKeyboardButton("Назад", callback_data=f"back_to_taskmenu_{task_id}"),
 
         ]
     ]

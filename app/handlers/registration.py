@@ -1,3 +1,5 @@
+import asyncio
+
 import psycopg
 from pyrogram.types import Message
 
@@ -61,3 +63,17 @@ class RegistrationHandler:
         if data:
             return User(**data)
         return
+
+    async def delete(self, message: Message):
+        """
+        Удаление пользователя
+        """
+        user_id = message.from_user.id
+        query = "DELETE FROM users WHERE user_id = %s"
+        await self.db.execute(query, (user_id,))
+        await asyncio.sleep(0.7)
+        await message.reply(
+            'Пользователь успешно удален. Для продолжения работы с менеджером задач пройдите процедуру регистрауии.')
+        await self.state.set_state(user_id, Registration.name)
+        await asyncio.sleep(0.7)
+        await message.reply("Введите Ваше имя!")

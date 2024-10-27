@@ -59,7 +59,7 @@ class Database:
                         name TEXT NOT NULL,
                         description TEXT NOT NULL,
                         is_completed BOOLEAN NOT NULL DEFAULT FALSE,
-                        FOREIGN KEY(user_id) REFERENCES users(user_id)
+                        FOREIGN KEY(user_id) REFERENCES users(user_id) ON DELETE CASCADE
                         )
                         """
                     )
