@@ -14,8 +14,8 @@ from settings import settings
 class TaskBot(Client):
     """
     Главный класс Telegram-бота.
-    Управляет запуском/остановкой/перезапуском бота
-    Автоматически регистрирует списки хэндлеров
+    Управляет запуском/остановкой/перезапуском бота.
+    Автоматически регистрирует пути хэндлеров.
     """
 
     def __init__(self):
@@ -27,10 +27,11 @@ class TaskBot(Client):
             api_hash=config.api_hash,
             bot_token=config.bot_token,
             parse_mode=enums.ParseMode.MARKDOWN,
-            plugins=dict(root="app.plugins")
         )
         self.db: Database = db
-        self.routers_path = 'app.plugins.basic'  # Маршрут к дериктории со списками хэндлеров
+        self.route_disp_path = (
+            "app.router_dispatcher"  # Маршрут к модулю со списками хэндлеров
+        )
 
     async def start(self):
         """Запускает бота и подключается к базе данных."""
@@ -54,20 +55,22 @@ class TaskBot(Client):
     async def _set_commands(self):
         """Установка команд в меню команд бота"""
         commands = [
-            BotCommand('start', 'Начать работу'),
-            BotCommand('delete', 'Удалить аккаунт'),
+            BotCommand("start", "Начать работу"),
+            BotCommand("delete", "Удалить аккаунт"),
         ]
         await self.set_bot_commands(commands)
 
     async def _register_handlers(self):
         # Получаем импорт файла, содержащего список хэндлеров
-        router_module = importlib.import_module(self.routers_path)
+        router_module = importlib.import_module(self.route_disp_path)
 
         # Получаем список кортежей, каждый кортеж содержит имя атрибута и его значение,
         # учитываются только атрибуты-списки, оканчивающиеся на 'handlers'
         handler_lists = [
-            (attr, getattr(router_module, attr)) for attr in dir(router_module)
-            if isinstance(getattr(router_module, attr), list) and attr.endswith('handlers')
+            (attr, getattr(router_module, attr))
+            for attr in dir(router_module)
+            if isinstance(getattr(router_module, attr), list)
+            and attr.endswith("handlers")
         ]
 
         for handler_list_name, handlers in handler_lists:
@@ -88,6 +91,7 @@ class TaskBot(Client):
     def register_callback_query_handlers(self, handlers):
         for handler_func, filter in handlers:
             self.add_handler(CallbackQueryHandler(handler_func, filter))
+
     #
     # def register_edited_message_handlers(self, handlers):
     #     for handler_func, filter in handlers:

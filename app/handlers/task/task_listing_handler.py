@@ -18,7 +18,6 @@ class TaskListingHandler(BaseTaskHandler):
                 status = "✅" if task.is_completed else "⏰"
                 keyboard = kb.task_menu(task.task_id, task.is_completed)
                 text = (
-                    f"{status} **{task.name}**\n"
-                    f"```Описание:\n{task.description}```"
+                    f"{status} **{task.name}**\n" f"```Описание:\n{task.description}```"
                 )
                 await message.reply(text, reply_markup=keyboard)

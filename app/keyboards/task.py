@@ -18,16 +18,19 @@ def task_menu(task_id: int, is_completed: bool) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(buttons)
 
+
 def task_edit_name_discr(task_id: int) -> InlineKeyboardMarkup:
     buttons: List[List[InlineKeyboardButton]] = [
         [
-            InlineKeyboardButton("Изменить название", callback_data=f"edit_task_name_{task_id}"),
-            InlineKeyboardButton("Изменить описание", callback_data=f"edit_task_disc_{task_id}"),
+            InlineKeyboardButton(
+                "Изменить название", callback_data=f"edit_task_name_{task_id}"
+            ),
+            InlineKeyboardButton(
+                "Изменить описание", callback_data=f"edit_task_disc_{task_id}"
+            ),
         ],
         [
             InlineKeyboardButton("Назад", callback_data=f"back_to_taskmenu_{task_id}"),
-
-        ]
+        ],
     ]
     return InlineKeyboardMarkup(buttons)
-

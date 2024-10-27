@@ -13,7 +13,7 @@ class TaskHandler(
     TaskEditingHandler,
     TaskStatusHandler,
     TaskDeletionHandler,
-    TaskListingHandler
+    TaskListingHandler,
 ):
     """Главный обработчик задач, объеденяет весь функционал."""
 

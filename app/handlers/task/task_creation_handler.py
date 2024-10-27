@@ -32,7 +32,11 @@ class TaskCreationHandler(BaseTaskHandler):
             try:
                 await self.db.execute(query, data)
             except psycopg.Error:
-                await message.reply('Произошла ошибка при добавлении задачи, попробуйте еще раз.')
+                await message.reply(
+                    "Произошла ошибка при добавлении задачи, попробуйте еще раз."
+                )
             else:
-                await message.reply("Задача успешно добавлена!", reply_markup=kb.main_menu())
+                await message.reply(
+                    "Задача успешно добавлена!", reply_markup=kb.main_menu()
+                )
             await self.state.clear(user_id)

@@ -12,6 +12,7 @@ class Registration:
     name = State()
     username = State()
 
+
 class EditTask:
     name = State()
     description = State()

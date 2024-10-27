@@ -1,14 +1,12 @@
 from typing import Optional, Union, Any
-from psycopg_pool import AsyncConnectionPool
-from psycopg.sql import LiteralString
+
+from faker import Faker
 from psycopg.rows import dict_row
-from psycopg.sql import SQL
+from psycopg_pool import AsyncConnectionPool
 
 from settings import settings
 
-
-
-
+fake = Faker()
 
 class Database:
     """Класс для взаимодествия с базой данных"""
@@ -20,14 +18,14 @@ class Database:
         """Соединение с базой"""
         self.pool = AsyncConnectionPool(
             conninfo=f"host={settings.db.db_host} "
-                     f"port={settings.db.db_port} "
-                     f"dbname={settings.db.db_name} "
-                     f"user={settings.db.db_user} "
-                     f"password={settings.db.db_password}",
+            f"port={settings.db.db_port} "
+            f"dbname={settings.db.db_name} "
+            f"user={settings.db.db_user} "
+            f"password={settings.db.db_password}",
             min_size=1,
             max_size=10,
             open=True,
-            kwargs={'row_factory': dict_row}
+            kwargs={"row_factory": dict_row},
         )
         await self.pool.open()
         await self.init_tables()
@@ -65,7 +63,7 @@ class Database:
                     )
                     await conn.commit()
         else:
-            raise ConnectionError('Пул соединений не инициализирован')
+            raise ConnectionError("Пул соединений не инициализирован")
 
     async def execute(self, query: str, params: Union[list, tuple] = ()) -> Any:
         """Выполнение запроса к базе данных. Возвращает результат/результаты"""
@@ -92,6 +90,25 @@ class Database:
                     return result
         else:
             raise ConnectionError("Пул соединений не инициализирован.")
+
+    async def populate_fake_tasks(self, user_id: int, num_tasks: int = 8) -> None:
+        """Тестовое заполнение базы данных вымышленными тасками."""
+        if not self.pool:
+            raise ConnectionError("Пул соединений не инициализирован.")
+
+        async with self.pool.connection() as conn:
+            async with conn.cursor() as cursor:
+                for _ in range(num_tasks):
+                    task_name = fake.sentence(nb_words=3)
+                    task_desc = fake.text(max_nb_chars=50)
+                    await cursor.execute(
+                        """
+                        INSERT INTO tasks (user_id, name, description, is_completed)
+                        VALUES (%s, %s, %s, %s)
+                        """,
+                        (user_id, task_name, task_desc, False)
+                    )
+                await conn.commit()
 
 
 db = Database()
