@@ -15,7 +15,7 @@ if lsof -i :$PORT > /dev/null; then
 fi
 
 # Execute Gunicorn with the specified configuration
-exec /home/ubuntu/.cache/pypoetry/virtualenvs/ankichat-IcZeuUhH-py3.12/bin/gunicorn \
+exec /home/ubuntu/.cache/pypoetry/virtualenvs/taskbotpyrogram-c-Phk8m_-py3.12/bin/gunicorn \
     --workers 1 \
     --bind 0.0.0.0:8003 \
     -c /home/ubuntu/taskbot/deployment_configs/gunicorn_conf.py \
